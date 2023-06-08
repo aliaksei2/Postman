@@ -17,7 +17,7 @@
 							"var jsonData = pm.response.json();",
 							"var res_token = jsonData.token",
 							"",
-							"pm.environment.set(\"token\", jsonData.token);",
+							"pm.environment.set(\"token\", res_token);",
 							"",
 							""
 						],
@@ -169,7 +169,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"age\":25,\n    \"salary\":1500,\n    \"name\":\"Alex\",\n    \"auth_token\":\"{{token}}\"\n\n}",
+					"raw": "{\n    \"age\" : 24 ,\n    \"salary\" : 2233,\n    \"name\" : \"kate\",\n    \"auth_token\" : \"{{token}}\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -275,17 +275,17 @@
 					"formdata": [
 						{
 							"key": "age",
-							"value": "25",
-							"type": "text"
-						},
-						{
-							"key": "salary",
-							"value": "1500",
+							"value": "24",
 							"type": "text"
 						},
 						{
 							"key": "name",
 							"value": "Alex",
+							"type": "text"
+						},
+						{
+							"key": "salary",
+							"value": "1000",
 							"type": "text"
 						},
 						{
@@ -381,17 +381,17 @@
 					"formdata": [
 						{
 							"key": "age",
-							"value": "25",
-							"type": "text"
-						},
-						{
-							"key": "weight",
-							"value": "95",
+							"value": "24",
 							"type": "text"
 						},
 						{
 							"key": "name",
 							"value": "Alex",
+							"type": "text"
+						},
+						{
+							"key": "weight",
+							"value": "100",
 							"type": "text"
 						},
 						{
@@ -506,6 +506,9 @@
 							"    pm.expect(pm.environment.get(\"name\")).to.eql(res_name);",
 							"});",
 							"",
+							"pm.test(\"environment name1\", function () {",
+							"    pm.expect(res_name).to.eql(pm.environment.get(\"name\"));",
+							"});",
 							"//4) Проверить что занчение поля age в ответе соответсвует отправленному в запросе значению поля age",
 							"pm.test(\" age\", function () {",
 							"    pm.expect(res_age).to.eql(req_age);",
@@ -523,12 +526,12 @@
 					"formdata": [
 						{
 							"key": "age",
-							"value": "{{age}}",
+							"value": "4",
 							"type": "text"
 						},
 						{
 							"key": "salary",
-							"value": "{{salary}}",
+							"value": "199",
 							"type": "text"
 						},
 						{
@@ -697,6 +700,102 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "***",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let res = pm.response.json();",
+							"let token = pm.environment.get('token')",
+							"let Cur_ID = pm.environment.get('Cur_ID')",
+							"",
+							"",
+							"for (let i = 0; i < res.length; i++) {",
+							"    pm.sendRequest({",
+							"        url: 'http://54.157.99.22:80/curr_byn',",
+							"        method: 'POST',",
+							"        header: {",
+							"            'Content-Type': 'application/json',",
+							"",
+							"        },",
+							"        body: {",
+							"            mode: 'urlencoded',",
+							"            urlencoded: [{key: 'auth_token', value: token },",
+							"            {key: 'curr_code', value: [i]}]",
+							"        }",
+							"}, (error, response) => { ",
+							"    res_data = response.json();",
+							"        if (response.code === 500) {",
+							"            console.log(error)",
+							"        } else if (response.code === 200) {",
+							"                if (Object.hasOwn(res_data, 'Cur_OfficialRate')) {",
+							"            console.log(res_data)",
+							"        }",
+							"    }",
+							"    });",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "auth_token",
+							"value": "{{token}}",
+							"type": "text"
+						},
+						{
+							"key": "curr_code",
+							"value": "1",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://54.157.99.22:80/currency",
+					"protocol": "http",
+					"host": [
+						"54",
+						"157",
+						"99",
+						"22"
+					],
+					"port": "80",
+					"path": [
+						"currency"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
 		}
 	]
 }
