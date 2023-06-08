@@ -508,7 +508,18 @@
 							"//17. Проверить, что параметр u_salary_5_years равен salary*4.2 из request (salary забрать из request.)",
 							"pm.test(\"u salary 5 \", function () {",
 							"    pm.expect(res_salary_5).to.eql(req_salary*4.2);",
-							"});"
+							"});",
+							"",
+							"",
+							"",
+							"",
+							"for (i in res_person) {",
+							"    if (Array.isArray(res_person[i])) {",
+							"    res_person[i].forEach(value => console.log(value));",
+							"} else {",
+							"console.log(`${i}: ${res_person[i]}`);",
+							"}",
+							"}"
 						],
 						"type": "text/javascript"
 					}
