@@ -516,9 +516,9 @@
 							"for (i in res_person) {",
 							"    if (Array.isArray(res_person[i])) {",
 							"    res_person[i].forEach(value => console.log(`${i}: ${value}`));",
-							"} else {",
+							"    } else {",
 							"console.log(`${i}: ${res_person[i]}`);",
-							"}",
+							"    }",
 							"}"
 						],
 						"type": "text/javascript"
